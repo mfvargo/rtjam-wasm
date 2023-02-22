@@ -5,9 +5,17 @@ import { setupAudio } from './utils/setupAudio';
 import { useEffect, useState } from 'react';
 
 function App() {
+  const [running, setRunning] = useState<boolean>(false);
   useEffect(() => {
-    setupAudio(statusCallback);
+    if (!running) {
+      setRunning(true);
+      setupAudio(statusCallback);
+    }
+    return () => {
+      // this now gets called when the component unmounts
+    };
   }, []);
+
   return (
     <div className="App">
       <header className="App-header">

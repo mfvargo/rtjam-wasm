@@ -1,7 +1,6 @@
 interface PitchMessageEvent extends MessageEvent {
   pitch?: number;
 }
-
 export default class JamEngineNode extends AudioWorkletNode {
   public onPitchDetectedCallback!: (pitch: number) => void;
 
@@ -28,10 +27,10 @@ export default class JamEngineNode extends AudioWorkletNode {
     if (event.type === 'wasm-module-loaded') {
       // This message means wasm was loaded and compiled.
       // Now we send one back to configure the pitch detector.
-      // this.port.postMessage({
-      //   type: 'init-detector',
-      //   sampleRate: this.context.sampleRate,
-      // });
+      this.port.postMessage({
+        type: 'init-jam-engine',
+        sampleRate: this.context.sampleRate,
+      });
     } else if (event.type === 'pitch' && event.pitch) {
       // A pitch was detected, so invoke our callback to update the UI.
       this.onPitchDetectedCallback(event.pitch);

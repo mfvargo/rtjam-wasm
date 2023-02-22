@@ -18,11 +18,9 @@ export async function setupAudio(statusCallback: (pitch: number) => void) {
   // get browser audio
   const mediaStream = await getWebAudioMediaStream();
   const context = new window.AudioContext();
-  await context.resume();
   const audioSource = context.createMediaStreamSource(mediaStream);
 
   let node;
-
   try {
     // Fetch WASM code
     const response = await window.fetch('rtjam-rust/rtjam_rust_wasm_bg.wasm');
@@ -48,8 +46,8 @@ export async function setupAudio(statusCallback: (pitch: number) => void) {
     node.connect(context.destination);
     console.log('connected node to destination');
   } catch (err) {
-    throw new Error(`Failed to load audio analyzer WASM module.`);
+    throw new Error(`Failed to load audio analyzer WASM module.` + err);
   }
-
+  await context.resume();
   return { context, node };
 }
