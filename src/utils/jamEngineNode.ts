@@ -13,10 +13,10 @@ export default class JamEngineNode extends AudioWorkletNode {
 
     // Listen to messages sent from the audioProcessor
     this.port.onmessage = (event) => this.onmessage(event.data);
-    // this.port.postMessage({
-    //   type: "send-wasm-module",
-    //   wasmBytes
-    // })
+    this.port.postMessage({
+      type: 'send-wasm-module',
+      wasmBytes,
+    });
   }
 
   // Handle an uncaught exception thrown in the PitchProcessor
@@ -28,10 +28,10 @@ export default class JamEngineNode extends AudioWorkletNode {
     if (event.type === 'wasm-module-loaded') {
       // This message means wasm was loaded and compiled.
       // Now we send one back to configure the pitch detector.
-      this.port.postMessage({
-        type: 'init-detector',
-        sampleRate: this.context.sampleRate,
-      });
+      // this.port.postMessage({
+      //   type: 'init-detector',
+      //   sampleRate: this.context.sampleRate,
+      // });
     } else if (event.type === 'pitch' && event.pitch) {
       // A pitch was detected, so invoke our callback to update the UI.
       this.onPitchDetectedCallback(event.pitch);

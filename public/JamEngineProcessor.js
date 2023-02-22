@@ -1,21 +1,11 @@
-// import './TextEncoder.js';
-// import init, { WasmPitchDetector } from './wasm-audio/wasm_audio.js';
+import './TextEncoder.js';
+import init from './rtjam-rust/rtjam_rust_wasm.js';
 
 class JamEngineProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
-
-    // Initialized to an array holding a buffer of samples for analysis later -
-    // once we know how many samples need to be stored. Meanwhile, an empty
-    // array is used, so that early calls to process() with empty channels
-    // do not break initialization.
-    this.samples = [];
-    this.totalSamples = 0;
-
     // Listen to events from the PitchNode running on the main thread.
     this.port.onmessage = (event) => this.onmessage(event.data);
-
-    this.detector = null;
   }
 
   onmessage(event) {
@@ -26,19 +16,6 @@ class JamEngineProcessor extends AudioWorkletProcessor {
       init(WebAssembly.compile(event.wasmBytes)).then(() => {
         this.port.postMessage({ type: 'wasm-module-loaded' });
       });
-    } else if (event.type === 'init-detector') {
-      const { sampleRate, numAudioSamplesPerAnalysis } = event;
-
-      // Store this because we use it later to detect when we have enough recorded
-      // audio samples for our first analysis.
-      this.numAudioSamplesPerAnalysis = numAudioSamplesPerAnalysis;
-
-      this.detector = WasmPitchDetector.new(sampleRate, numAudioSamplesPerAnalysis);
-
-      // Holds a buffer of audio sample values that we'll send to the Wasm module
-      // for analysis at regular intervals.
-      this.samples = new Array(numAudioSamplesPerAnalysis).fill(0);
-      this.totalSamples = 0;
     }
   }
 

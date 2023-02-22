@@ -25,9 +25,9 @@ export async function setupAudio(statusCallback: (pitch: number) => void) {
 
   try {
     // Fetch WASM code
-    // const response = await window.fetch("wasm-tuner/wasm_tuner_bg.wasm");
-    // const wasmBytes = await response.arrayBuffer();
-    const wasmBytes = new ArrayBuffer(0);
+    const response = await window.fetch('rtjam-rust/rtjam_rust_wasm_bg.wasm');
+    const wasmBytes = await response.arrayBuffer();
+    // const wasmBytes = new ArrayBuffer(0);
 
     // Add our worklet to the context
     console.log(context);
