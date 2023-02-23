@@ -1,1 +1,9 @@
+pub mod channel_map;
+pub mod channel_strip;
+pub mod fader;
+pub mod jam_engine;
+pub mod jam_params;
 pub mod jam_socket;
+pub mod jitter_buffer;
+pub mod mixer;
+pub mod param_message;

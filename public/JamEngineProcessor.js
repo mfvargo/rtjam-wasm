@@ -23,11 +23,18 @@ class JamEngineProcessor extends AudioWorkletProcessor {
     }
   }
 
-  process(inputs, outputs) {
+  process(inputList, outputList) {
     if (this.engineBlock !== null) {
       // inputSamples holds an array of new samples to process.
-      this.engineBlock.process(inputs[0][0], inputs[0][1], outputs[0][0], outputs[0][1]);
+      this.engineBlock.process(
+        inputList[0][0],
+        inputList[0][1],
+        outputList[0][0],
+        outputList[0][1]
+      );
     }
+    return true;
+
     // const inputSamples = inputs[0][0];
     // let outputChan = outputs[0];
     // let i = 0;

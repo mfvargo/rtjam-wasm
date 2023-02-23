@@ -61,10 +61,12 @@ pub fn to_lin(v: f32) -> f32 {
 
 // Get the time in microseconds
 pub fn get_micro_time() -> u128 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_micros()
+    let now = js_sys::Date::now();
+    (now * 1000.0) as u128
+    // SystemTime::now()
+    //     .duration_since(UNIX_EPOCH)
+    //     .unwrap()
+    //     .as_micros()
 }
 
 #[cfg(test)]
